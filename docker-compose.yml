@@ -1,0 +1,79 @@
+version: '3.8'
+
+services:
+#################
+#POSTGRES DATABASE
+#################
+  postgres:
+    image: postgres:16-alpine
+    container_name: pp_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: app_db
+      POSTGRES_USER: app_user
+      POSTGRES_PASSWORD: secretpassword
+    ports:
+      - "5432:5432" #Allows DBeaver/Tableplus from Windows to Connect
+    volumes: 
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - app_network
+
+
+
+   ###############
+   #LARAVEL BACKEND
+   ###############
+   backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: app_backend
+    restart: unless-stopped
+    ports:
+      - "8000:8000" 
+    volumes:
+      - ./backend:/var/www #Bind mount - live code sync
+    environment:
+      DB_CONNECTION: pgsql
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_DATABASE: app_db
+      DB_USERNAME: app_user
+      DB_PASSWORD: secretpassword
+    depends_on:
+      - postgres
+    networks:
+      - app_network
+
+  #====================
+  #REACT FRONTEND
+  #====================
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: app_frontend
+    restart: unless-stopped
+    port:
+      - "5173:5173"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    depends_on:
+      - backend
+    networks:
+      - app_network
+  
+  #====================
+  #PERSISTENT VOLUMES AND NETWORKS
+  #====================
+
+  volumes:
+    postgres_data:
+      driver: local
+
+  networks:
+    app_network:
+      driver: bridge
