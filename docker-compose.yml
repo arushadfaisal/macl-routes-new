@@ -18,13 +18,19 @@ services:
       - postgres_data:/var/lib/postgresql/data
     networks:
       - app_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U app_user -d app_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
 
 
 
    ###############
    #LARAVEL BACKEND
    ###############
-   backend:
+  backend:
     build:
       context: ./backend
       dockerfile: Dockerfile
@@ -42,7 +48,8 @@ services:
       DB_USERNAME: app_user
       DB_PASSWORD: secretpassword
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
     networks:
       - app_network
 
@@ -56,7 +63,7 @@ services:
       dockerfile: Dockerfile
     container_name: app_frontend
     restart: unless-stopped
-    port:
+    ports:
       - "5173:5173"
     volumes:
       - ./frontend:/app
@@ -70,10 +77,10 @@ services:
   #PERSISTENT VOLUMES AND NETWORKS
   #====================
 
-  volumes:
-    postgres_data:
-      driver: local
+volumes:
+  postgres_data:
+    driver: local
 
-  networks:
-    app_network:
-      driver: bridge
+networks:
+  app_network:
+    driver: bridge
