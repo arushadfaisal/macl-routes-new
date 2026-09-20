@@ -14,13 +14,6 @@ return new class extends Migration
         Schema::create('routes', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->string('name');             // Name of the route
-            $table->string('description');      // Description of the route
-            $table->string('start_location');   // Starting point of the route
-            $table->string('end_location');     // Ending point of the route
-            $table->json('stops');          // JSON array of stops along the route 
-            $table->time('start_time');      // Start time of the route
-            $table->weekday('days_of_week');    // Days of the week the route operates
         });
     }
 
