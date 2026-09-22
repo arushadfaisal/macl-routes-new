@@ -7,7 +7,7 @@ const TimeCard = ({ route, previousTime, nextTime, nextNextTime }: { route: stri
 
     return (
         <>
-            <div className="flex flex-col items-center justify-center bg-gray-200 p-4 m-4 rounded-lg shadow-md max-w-sm mx-auto">
+            <div className="flex flex-col items-center justify-center bg-gray-200 p-4 m-2 rounded-lg shadow-md max-w-sm mx-auto">
                 <div>
                     <h2 className="text-2xl font-bold pb-3">{route}</h2>
                 </div>
