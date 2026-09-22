@@ -25,7 +25,7 @@ const BottomNavBar = ({ activeTab, setActiveTab }: BottomNavBarProps) => {
 
     return (
         <div className="fixed bottom-0 w-full">
-            <div className="mx-auto m-5 rounded-full min-w-sm max-w-sm flex justify-around bg-gray-800 p-2">
+            <div className="mx-auto m-5 rounded-full shadow-xl min-w-sm max-w-md flex justify-around bg-gray-800 p-2">
                 {navButton('about', <InfoIcon className="w-4 h-4" />, 'About')}
                 {navButton('home', <House className="w-4 h-4" />, 'Home')}
                 {navButton('contact', <SendIcon className="w-4 h-4" />, 'Contact')}
