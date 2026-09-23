@@ -1,13 +1,22 @@
 import {useState} from 'react';
 
-const TimeCard = ({ route, previousTime, nextTime, nextNextTime }: { route: string; previousTime: string; nextTime: string; nextNextTime: string }) => {
+interface TimeCardProps {
+    route: string;
+    previousTime: string;
+    nextTime: string;
+    nextNextTime: string;
+    onClick?: () => void;
+}
+
+const TimeCard = ({ route, previousTime, nextTime, nextNextTime, onClick}: TimeCardProps ) => {
     const [statetime, setstateTime] = useState(nextTime);
     const [nextstatetime, setNextstateTime] = useState(nextNextTime);
     const [previousstatetime, setPreviousstateTime] = useState(previousTime);
 
     return (
         <>
-            <div className="flex flex-col items-center justify-center bg-gray-200 p-4 m-2 rounded-lg shadow-md max-w-sm mx-auto">
+            <div onClick={onClick} className="flex flex-col items-center justify-center bg-gray-200 p-4 m-2 rounded-lg shadow-md max-w-sm mx-auto
+                    transition duration-200 hover:scale-105 cursor-pointer active:scale-80">
                 <div>
                     <h2 className="text-2xl font-bold pb-3">{route}</h2>
                 </div>
